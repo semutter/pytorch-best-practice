@@ -1,4 +1,5 @@
 *pyc
 data/dogscats
+data/MNIST
 checkpoints
 .idea

@@ -9,6 +9,9 @@ from torch.autograd import Variable
 from torchnet import meter
 from utils.visualize import Visualizer
 from tqdm import tqdm
+from config import DogsCatsConfig
+
+opt = DogsCatsConfig()
 
 def test(**kwargs):
     opt.parse(kwargs)

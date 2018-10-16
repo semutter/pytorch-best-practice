@@ -40,13 +40,31 @@ class Visualizer(object):
         self.plot('loss',1.00)
         '''
         x = self.index.get(name, 0)
+        opts = kwargs.get("opts", {})
+        opts['title'] = name
+        kwargs['opts'] = opts
         self.vis.line(Y=np.array([y]), X=np.array([x]),
                       win=name,
-                      opts=dict(title=name),
                       update=None if x == 0 else 'append',
                       **kwargs
                       )
         self.index[name] = x + 1
+
+    def plot_xy(self, name, x, y, **kwargs):
+        '''
+        similar to plot
+        except x vs y
+        '''
+        ind = self.index.get(name, 0)
+        opts = kwargs.get("opts", {})
+        opts['title'] = name
+        kwargs['opts'] = opts
+        self.vis.line(Y=np.array([y]), X=np.array([x]),
+                      win=name,
+                      update=None if ind == 0 else 'append',
+                      **kwargs
+                      )
+        self.index[name] = ind + 1
 
     def img(self, name, img_,**kwargs):
         '''
@@ -57,8 +75,11 @@ class Visualizer(object):
 
         ！！！don‘t ~~self.img('input_imgs',t.Tensor(100,64,64),nrows=10)~~！！！
         '''
+        opts = kwargs.get("opts", {})
+        opts['title'] = name
+        kwargs['opts'] = opts
         self.vis.images(img_.cpu().numpy(),
-                       win=unicode(name),
+                       win=name,
                        opts=dict(title=name),
                        **kwargs
                        )
