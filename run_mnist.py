@@ -80,7 +80,7 @@ def train(**kwargs):
 
         vis.plot("loss", [loss_meter.value()[0], val_loss_meter.value()[0]],
                  opts=dict(legend=["train", "val"]))
-        vis.plot_xy("epoch-time", epoch, train_time_meter.value())
+        # vis.plot_xy("epoch-time", epoch, train_time_meter.value())
         vis.plot_xy("time-loss", train_time_meter.value(), loss_meter.value()[0])
         vis.plot("acc", [float(train_correct_cnt)/len(train_set), float(val_correct_cnt)/len(val_set)],
                  opts=dict(legend=["train", "val"]))
