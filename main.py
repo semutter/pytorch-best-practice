@@ -21,8 +21,8 @@ def test(**kwargs):
     if opt.use_gpu: model.cuda()
 
     # data
-    train_data = DogCat(opt.test_data_root,test=True)
-    test_dataloader = DataLoader(train_data,batch_size=opt.batch_size,shuffle=False,num_workers=opt.num_workers)
+    test_data = DogCat(opt.test_data_root, test=True, length=opt.test_max_num)
+    test_dataloader = DataLoader(test_data,batch_size=opt.batch_size,shuffle=False,num_workers=opt.num_workers)
     results = []
     for ii,(data,path) in enumerate(test_dataloader):
         input = t.autograd.Variable(data,volatile = True)
@@ -56,8 +56,8 @@ def train(**kwargs):
     if opt.use_gpu: model.cuda()
 
     # step2: data
-    train_data = DogCat(opt.train_data_root,train=True)
-    val_data = DogCat(opt.train_data_root,train=False)
+    train_data = DogCat(opt.train_data_root, train=True, length=opt.train_max_num)
+    val_data = DogCat(opt.val_data_root,train=False, length=opt.val_max_num)
     train_dataloader = DataLoader(train_data,opt.batch_size,
                         shuffle=True,num_workers=opt.num_workers)
     val_dataloader = DataLoader(val_data,opt.batch_size,
@@ -96,7 +96,7 @@ def train(**kwargs):
             
             
             # meters update and visualize
-            loss_meter.add(loss.data[0])
+            loss_meter.add(loss.item())
             confusion_matrix.add(score.data, target.data)
 
             if ii%opt.print_freq==opt.print_freq-1:
@@ -135,13 +135,12 @@ def val(model,dataloader):
     confusion_matrix = meter.ConfusionMeter(2)
     for ii, data in enumerate(dataloader):
         input, label = data
-        val_input = Variable(input, volatile=True)
-        val_label = Variable(label.type(t.LongTensor), volatile=True)
-        if opt.use_gpu:
-            val_input = val_input.cuda()
-            val_label = val_label.cuda()
-        score = model(val_input)
-        confusion_matrix.add(score.data.squeeze(), label.type(t.LongTensor))
+        with t.no_grad():
+            if opt.use_gpu:
+                input = input.cuda()
+                label = label.cuda()
+            score = model(input)
+            confusion_matrix.add(score.data.squeeze(), label.type(t.LongTensor))
 
     model.train()
     cm_value = confusion_matrix.value()

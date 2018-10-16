@@ -275,11 +275,11 @@ class Visualizer(object):
         一次plot多个
         @params d: dict (name, value) i.e. ('loss', 0.11)
         '''
-        for k, v in d.iteritems():
+        for k, v in d.items():
             self.plot(k, v)
 
     def img_many(self, d):
-        for k, v in d.iteritems():
+        for k, v in d.items():
             self.img(k, v)
 
     def plot(self, name, y, **kwargs):
@@ -381,7 +381,7 @@ def parse(self, kwargs):
         根据字典kwargs 更新 config参数
         '''
         # 更新配置参数
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             if not hasattr(self, k):
                 # 警告还是报错，取决于你个人的喜好
                 warnings.warn("Warning: opt has not attribut %s" %k)
@@ -389,7 +389,7 @@ def parse(self, kwargs):
             
         # 打印配置信息	
         print('user config:')
-        for k, v in self.__class__.__dict__.iteritems():
+        for k, v in self.__class__.__dict__.items():
             if not k.startswith('__'):
                 print(k, getattr(self, k))
 ```

@@ -28,11 +28,11 @@ class Visualizer(object):
         一次plot多个
         @params d: dict (name,value) i.e. ('loss',0.11)
         '''
-        for k, v in d.iteritems():
+        for k, v in d.items():
             self.plot(k, v)
 
     def img_many(self, d):
-        for k, v in d.iteritems():
+        for k, v in d.items():
             self.img(k, v)
 
     def plot(self, name, y,**kwargs):
@@ -41,7 +41,7 @@ class Visualizer(object):
         '''
         x = self.index.get(name, 0)
         self.vis.line(Y=np.array([y]), X=np.array([x]),
-                      win=unicode(name),
+                      win=name,
                       opts=dict(title=name),
                       update=None if x == 0 else 'append',
                       **kwargs
